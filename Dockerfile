@@ -1,21 +1,15 @@
-FROM python:3.6-alpine
+FROM python:3.8.2-slim-buster
 
-# use dumb-init as container supervisor
-RUN apk add dumb-init
-
-WORKDIR "/app"
-
-COPY patroni_exporter.py .
 COPY requirements.txt .
-
-RUN pip install \
-	--no-cache-dir \
-	-r requirements.txt
+RUN pip install --quiet -r requirements.txt
 
 # run application process with non-root user
-RUN addgroup -S patroni_exporter \
-	&& adduser -H -S -G patroni_exporter patroni_exporter
-
+RUN groupadd -r patroni_exporter \
+	&& useradd -r -m -g patroni_exporter patroni_exporter
 USER patroni_exporter
 
-ENTRYPOINT [ "/usr/bin/dumb-init",  "--", "/app/patroni_exporter.py" ]
+WORKDIR "/home/patroni_exporter"
+
+COPY patroni_exporter.py .
+
+ENTRYPOINT [ "python", "patroni_exporter.py" ]
