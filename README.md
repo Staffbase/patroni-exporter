@@ -38,3 +38,11 @@ docker build -t patroni_exporter .
 ```
 docker run -d -ti patroni_exporter --port some_port --patroni-url http://some_host_fqdn:some_port/patroni --timeout 5 --debug
 ```
+
+## Dependencies
+
+To have reproducible builds all dependencies within `requirements.txt` are pinned via pip-compile (which is a part of [pip-tools](https://github.com/jazzband/pip-tools))
+Update with: 
+```
+running pip-compile requirements.in > requirements.txt
+``` 
