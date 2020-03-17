@@ -52,13 +52,14 @@ class PatroniCollector:
 
         :return:
         """
-        while self.status != '200 OK':
+        while True:
             logger.debug(f'Scraping Patroni API at {self.url}.')
             try:
                 r = requests.get(self.url, timeout=self.timeout, verify=self.requests_verify)
                 r.raise_for_status()
                 self.scrape = r.json()
                 self.status = '200 OK'
+                break
             except Exception as e:
                 self.status = '503 Service Unavailable'
                 self.scrape = {}
