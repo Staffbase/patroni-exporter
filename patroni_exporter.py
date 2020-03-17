@@ -25,6 +25,7 @@ import logging
 import argparse
 import socket
 import requests
+import time
 from os import environ
 
 logging.basicConfig(level=logging.INFO)
@@ -51,17 +52,20 @@ class PatroniCollector:
 
         :return:
         """
-        logger.debug(f'Scraping Patroni API at {self.url}.')
-        try:
-            r = requests.get(self.url, timeout=self.timeout,
-                             verify=self.requests_verify)
-            r.raise_for_status()
-            self.scrape = r.json()
-            self.status = '200 OK'
-        except Exception as e:
-            self.status = '503 Service Unavailable'
-            self.scrape = {}
-            logger.error(f'Scraping of Patroni @ {self.url} failed: {e}')
+        while self.status != '200 OK':
+            logger.debug(f'Scraping Patroni API at {self.url}.')
+            try:
+                r = requests.get(self.url, timeout=self.timeout, verify=self.requests_verify)
+                r.raise_for_status()
+                self.scrape = r.json()
+                self.status = '200 OK'
+            except Exception as e:
+                self.status = '503 Service Unavailable'
+                self.scrape = {}
+                logger.error(f'Scraping of Patroni @ {self.url} failed: {e}')
+                logger.info('Sleep(30) and retry')
+                time.sleep(30)
+                continue
         logger.debug(f'Scraped data: {self.scrape}')
 
     @staticmethod
