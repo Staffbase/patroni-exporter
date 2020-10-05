@@ -46,3 +46,7 @@ Update with:
 ```
 running pip-compile requirements.in > requirements.txt
 ``` 
+
+## Known issues/limitations/workarounds
+
+- due to how Patroni replicas respond with their information, but, when compared to primary, use HTTP code 503 (Service Unavailable) to avoid being registered as write-capable endpoints on load balancers, the exporter will attempt proper parsing when the response is a JSON with key-value `{"role": "replica"}`

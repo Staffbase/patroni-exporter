@@ -52,21 +52,18 @@ class PatroniCollector:
 
         :return:
         """
-        while True:
-            logger.debug(f'Scraping Patroni API at {self.url}.')
-            try:
-                r = requests.get(self.url, timeout=self.timeout, verify=self.requests_verify)
+        logger.debug(f'Scraping Patroni API at {self.url}.')
+        try:
+            r = requests.get(self.url, timeout=self.timeout,
+                             verify=self.requests_verify)
+            self.scrape = r.json()
+            if not self.scrape.get('role') == 'replica':
                 r.raise_for_status()
-                self.scrape = r.json()
-                self.status = '200 OK'
-                break
-            except Exception as e:
-                self.status = '503 Service Unavailable'
-                self.scrape = {}
-                logger.error(f'Scraping of Patroni @ {self.url} failed: {e}')
-                logger.info('Sleep(30) and retry')
-                time.sleep(30)
-                continue
+            self.status = '200 OK'
+        except Exception as e:
+            self.status = '503 Service Unavailable'
+            self.scrape = {}
+            logger.error(f'Scraping of Patroni @ {self.url} failed: {e}')
         logger.debug(f'Scraped data: {self.scrape}')
 
     @staticmethod
