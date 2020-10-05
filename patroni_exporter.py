@@ -150,10 +150,12 @@ class PatroniCollector:
     def _process_gauge(data: Dict, label: str) -> List[GaugeMetricFamily]:
         metrics = []
         for k, v in data.items():
-            g = GaugeMetricFamily(f'patroni_{label}_{k}',
-                                  f'{label} gauge {k}')
-            g.add_metric([k], float(v))
-            metrics.append(g)
+            try:
+                g = GaugeMetricFamily(f'patroni_{label}_{k}', f'{label} gauge {k}')
+                g.add_metric([k], float(v))
+                metrics.append(g)
+            except Exception as e:
+                logger.error(f'Could not add metric {k} with value {v}: {e}')
 
         return metrics
 
