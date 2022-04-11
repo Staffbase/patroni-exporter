@@ -1,11 +1,13 @@
-FROM python:3.8.2-slim-buster
+FROM python:3.9.12-slim
 
 COPY requirements.txt .
+
 RUN pip install --quiet -r requirements.txt
 
 # run application process with non-root user
 RUN groupadd -r patroni_exporter \
 	&& useradd -r -m -g patroni_exporter patroni_exporter
+
 USER patroni_exporter
 
 WORKDIR "/home/patroni_exporter"
