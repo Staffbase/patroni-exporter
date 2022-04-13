@@ -12,8 +12,6 @@ jobs:
   docker:
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
     name: Push Docker Image
-    env:
-      IMAGE_NAME: staffbase/patroni-exporter
     runs-on: ubuntu-20.04
     steps:
       - name: Check out source code
