@@ -6,8 +6,6 @@ on:
 jobs:
   docker:
     name: Build Docker image
-    env:
-      IMAGE_NAME: staffbase/patroni-exporter
     runs-on: ubuntu-20.04
     steps:
       - name: Check out source code
