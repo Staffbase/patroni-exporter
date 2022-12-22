@@ -1,18 +1,12 @@
-name: Push to Registry
+name: CI CD
 
 on:
-  push:
-    branches:
-      - 'master'
-      - 'dev'
-    tags:
-      - '*'
+  pull_request:
 
 jobs:
   docker:
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
-    name: Push Docker Image
-    runs-on: ubuntu-20.04
+    name: Build Docker image
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out source code
         uses: actions/checkout@v3
@@ -20,27 +14,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
       - name: Docker metadata action
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
-          images: |
-            staffbase/patroni-exporter
+          images:
+            patroni-exporter-local
           tags: |
-            type=ref,event=tag
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha,format=long
-      
-      - name: Build & Push
-        uses: docker/build-push-action@v2
+            type=raw,latest
+
+      - name: Build Dockerimage
+        id: docker_build
+        uses: docker/build-push-action@v3
         with:
-          push: true
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=docker,dest=/tmp/mongodb-exporter-local.tar
+          platforms: linux/amd64
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
