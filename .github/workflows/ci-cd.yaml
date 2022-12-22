@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=docker,dest=/tmp/mongodb-exporter-local.tar
+          outputs: type=docker,dest=/tmp/patroni-exporter-local.tar
           platforms: linux/amd64
           push: false
           tags: ${{ steps.meta.outputs.tags }}
