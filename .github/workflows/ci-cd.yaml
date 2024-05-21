@@ -25,7 +25,7 @@ jobs:
 
       - name: Build Dockerimage
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=docker,dest=/tmp/patroni-exporter-local.tar
