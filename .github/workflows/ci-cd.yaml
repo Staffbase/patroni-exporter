@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  docker-build:
+  docker:
     name: Build Docker image
     runs-on: ubuntu-22.04
     steps:
@@ -36,7 +36,7 @@ jobs:
   dependabot-automerge:
     name: Auto Merge (Dependabot)
     needs:
-      - docker-build
+      - docker
     uses: Staffbase/gha-workflows/.github/workflows/template_automerge_dependabot.yml@v5.2.0
     with:
       force: true
