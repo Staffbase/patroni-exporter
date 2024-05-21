@@ -14,7 +14,7 @@ prometheus-client==0.20.0
     # via -r requirements.in
 python-dateutil==2.9.0.post0
     # via -r requirements.in
-requests==2.32.0
+requests==2.32.1
     # via -r requirements.in
 six==1.14.0
     # via python-dateutil
