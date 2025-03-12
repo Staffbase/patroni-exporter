@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: patroni-exporter
+  description: Prometheus exporter of Patroni API metrics
+  annotations:
+    github.com/project-slug: Staffbase/patroni-exporter
+    github.com/team-slug: Staffbase/diablo
+    jfrog-artifactory/image-name: apperator
+  tags:
+    - kubernetes
+    - exporter
+    - python
+spec:
+  type: service
+  owner: diablo
+  lifecycle: production
