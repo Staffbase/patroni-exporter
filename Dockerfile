@@ -1,4 +1,5 @@
 FROM python:3.13.7-slim
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && apt-get clean
 
 COPY requirements.txt .
 
